@@ -44,18 +44,16 @@
 如果发出的请求得到回复，将返回一个json数据，类似：
 ![json data](https://raw.githubusercontent.com/windring/Koishumi/markdown/img/Snipaste_2017-11-06_23-40-22.png "")
 页面[ApiReference](https://westus.dev.cognitive.microsoft.com/docs/services/58994a073d9e04097c7ba6fe/operations/58994a073d9e041ad42d9ba9 "")给出了C#的调用方法。打开vs项目，编辑```Dialogs->RootDialog.cs```。在头部添加引用：
-
- ```cs
+```cs
 using System.Net.Http.Headers;
 using System.Text;
 using System.Net.Http;
 using System.Web;
 using System.Collections.Generic;
 using Newtonsoft.Json;
- ```
+```
 在类RootDialog之前添加类QnAMakerResult，这是用于解析json数据的模板。
-
- ```cs
+```cs
 public class QnAMakerResult
 {
     public class Answers
@@ -69,15 +67,13 @@ public class QnAMakerResult
     }
     [JsonProperty(PropertyName = "answers")]
     public List<Answers> answers { get; set; }
- ```
+```
 将行
-
- ```cs
+```cs
 await context.PostAsync($"You sent {activity.Text} which was {length} characters");
- ```
+```
 注释掉，用QnA Maker提供的方法替换。将相应的```Ocp-Apim-Subscription-Key```，```/knowledgebases*generrateAnswer```分别替换成此QnA Maker Service的Ocp-Apim-Subscription-Key，POST参数。
-
- ```cs
+```cs
 //await context.PostAsync($"You sent {activity.Text} which was {length} characters");
 var client = new HttpClient();
 var queryString = HttpUtility.ParseQueryString(string.Empty);
@@ -93,7 +89,7 @@ using (var content = new ByteArrayContent(byteData))
     response = await client.PostAsync(uri, content);
     await context.PostAsync(response.Content.ReadAsAsync<QnAMakerResult>().Result.answers[0].answer);
 }
- ```
+```
 运行项目，回到Bot Framework Emulator，键入"微软俱乐部简介"，应该能得到如下回应:
 ![FAQ](https://raw.githubusercontent.com/windring/Koishumi/markdown/img/Snipaste_2017-11-06_23-51-46.png "")
 接下来，请好好地训练此QnA Maker Service吧。
@@ -133,15 +129,14 @@ using (var content = new ByteArrayContent(byteData))
 填写表单，你还可以上传一个卡哇伊的icon。url不是必须此时填写，但是必须使用https。待页面显示完整，点击```生成密码以继续```按钮，记录下MicrosoftAppId和其他重要信息（特别是密码）。将得到的MicrosoftAppId回填到注册页面。```Analytics```项信息可不必填写。完成注册。当显示```Bot created```对话框，bot注册完成。  
  2. 连接  
 回到vs项目，编辑```Web.config```文件。找到：
-
- ```xml
+```xml
 <appSettings>
 <!-- update these with your BotId, Microsoft App Id and your Microsoft App Password-->
 <add key="BotId" value="YourBotId" />
 <add key="MicrosoftAppId" value="" />
 <add key="MicrosoftAppPassword" value="" />
 </appSettings>
- ```  
+```  
 将刚刚得到的MicrosoftAppId和生成的密码填在对应的value字串中。保存，运行调试，发布。注意，此后连接你的bot都必须提供MicrosoftAppId，MicrosoftAppPassword，比如使用Bot Framework Emulator连接时需要在MicrosoftAppId，MicrosoftAppPassword参数输入框分别填上相应字串。
  3. test  
 转到botframework.com中你的bot的控制面板，点击test按钮，在对话框中试试，如果一切正常应该会有如下显示：
@@ -155,13 +150,12 @@ using (var content = new ByteArrayContent(byteData))
 在botframework.com的bot的控制面板，点击```Web Chat```的edit，在新页面中，点击第一行secret key右的show button，使secret key显示，记录下来。拷贝Embed code中的代码。
 ![set](https://raw.githubusercontent.com/windring/Koishumi/markdown/img/Snipaste_2017-11-07_13-02-57.png "")
 打开vs项目，用以下内容替换```default.htm```的全部内容。（为简洁，我将不写出完整的html标签，但其显示效果是一样的）
-
- ```html
+```html
 <style>
 body,html,iframe{margin:0;padding:0;width:100%;height:100%;border:0;}
 </style>
 <iframe src='https://webchat.botframework.com/embed/***?s=YOUR_SECRET_HERE'></iframe>
- ```
+```
 将星号替换成你的Bot handle，或者将之前复制的Embed code替换掉```<iframe>***</iframe>```标签。然后将```YOUR_SECRET_HERE```替换成你的secrect key，保存，运行调试，发布。成功后，访问你的azure web app提供的url（在app概况中，形如```http://appname.chinacloudsites.cn```），应该能看到类似的页面：
 ![web chat](https://raw.githubusercontent.com/windring/Koishumi/markdown/img/Snipaste_2017-11-07_13-16-31.png "")
 事实上，此配置正确的htm/html文件可以在任何地方使用。
@@ -175,18 +169,16 @@ waiting...
 ![api key](https://raw.githubusercontent.com/windring/Koishumi/markdown/img/Snipaste_2017-11-08_14-24-26.png "") 
 2. 修改bot
 在vs编辑```Dialogs->RootDialog.cs```文件，在命名空间下添加类```TulingAns```作为api返回数据的json解析模板。
-
- ```cs
+```cs
 public class TulingAns
 {
     public int code;
     public string text;
 }
- ```
+```
 3. 添加异步操作```TulingQna```  
 在类```RootDialog```添加异步操作```TulingQna```如下：
-
- ```cs
+```cs
  public async Task<string> TulingQna(string Text)
 {
     var t_client = new HttpClient();
@@ -213,21 +205,19 @@ public class TulingAns
         }
     }
 }
- ```
+```
 并将key的值修改为刚刚获得的APIKey。
 4. 修改异步操作```MessageReceivedAsync```  
 当QnA Maker无法找到匹配答案时，会返回```No good match found in the KB```，在此时我们进行```TulingQna操作```。  
 在异步操作```MessageReceivedAsync```中找到代码块：
-
- ```cs
+```cs
 using (var content = new ByteArrayContent(byteData))
 {
  //...
 }
- ```
+```
  修改为：
-
- ```cs
+```cs
 using (var content = new ByteArrayContent(byteData))
 {
     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
@@ -242,7 +232,7 @@ using (var content = new ByteArrayContent(byteData))
         await context.PostAsync(await TulingQna(activity.Text));
     }
 }
- ```
+```
 5. the end  
 保存，运行调试，发布。
 
