@@ -115,7 +115,7 @@ using (var content = new ByteArrayContent(byteData))
 此时vs应该已经开始自动发布，如果没有，可以手动点击发布按钮。
 4. 验证发布  
 在azure的app 概述页面，找到你的app url，通常为绿色框所示:
-![url](https://raw.githubusercontent.com/windring/Koishumi/markdown/img/Snipaste_2017-11-07_08-33-38 - 1.png "")
+![url](https://raw.githubusercontent.com/windring/Koishumi/markdown/img/Snipaste_2017-11-07_08-33-38- 1.png "")
 在浏览器访问此url，如果能看到与0x1.4一样的页面，那么部署应该未现异常。  
 在Bot Framework Emulator键入新的url，别忘了加上```/api/messages```，验证是否正确。
 ![yeah](https://raw.githubusercontent.com/windring/Koishumi/markdown/img/Snipaste_2017-11-07_08-56-00.png "")
@@ -179,7 +179,7 @@ public class TulingAns
 3. 添加异步操作```TulingQna```  
 在类```RootDialog```添加异步操作```TulingQna```如下：
 ```cs
- public async Task<string> TulingQna(string Text)
+public async Task<string> TulingQna(string Text)
 {
     var t_client = new HttpClient();
     var t_queryString = HttpUtility.ParseQueryString(string.Empty);
