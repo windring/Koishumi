@@ -27,7 +27,7 @@
 
 此时与你的bot进行通讯，按照模板所code，它应该会返回你发送的信息和所包含字符数。
 
-###0x3连接此bot到QnA Maker
+### 0x3连接此bot到QnA Maker
 
 #### 什么是QnA Maker？
 
