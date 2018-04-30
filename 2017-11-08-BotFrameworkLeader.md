@@ -91,7 +91,9 @@ using (var content = new ByteArrayContent(byteData))
 }
 ```
 运行项目，回到Bot Framework Emulator，键入"微软俱乐部简介"，应该能得到如下回应:
+
 ![FAQ](https://raw.githubusercontent.com/windring/Koishumi/markdown/img/Snipaste_2017-11-06_23-51-46.png "")
+
 接下来，请好好地训练此QnA Maker Service吧。
 
 ### 0x4 发布此bot到Azure
